@@ -21,10 +21,11 @@ public class Transaction {
 
     private static int sequence = 0;
 
-    public  Transaction(PublicKey from  , PublicKey to  , float value){
+    public  Transaction(PublicKey from  , PublicKey to  , float value , ArrayList<TransactionInput> inputs){
         this.sender = from;
         this.reciepient = to;
         this.value = value;
+        this.inputs  = inputs;
     }
 
 
