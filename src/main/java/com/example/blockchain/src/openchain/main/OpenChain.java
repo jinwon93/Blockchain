@@ -30,7 +30,6 @@ public class OpenChain {
 
     public static void  main(String[] arg){
 
-
         Security.addProvider(new BouncyCastleProvider());
 
         walletA  =  new Wallet();
@@ -42,5 +41,27 @@ public class OpenChain {
 
         Transaction transaction  = new Transaction(walletA.publicKey , walletB.publicKey , 5 , null);
         transaction.generateSignature(walletA.privateKey);
+    }
+
+
+    public static Boolean isChainVaild(){
+        Block currentBlock;
+        Block previousBlock;
+
+        for (int i=1; i < blocks.size(); i++){
+            currentBlock = blocks.get(i);
+            previousBlock = blocks.get(i-1);
+
+
+            if (!currentBlock.hash.equals(currentBlock.calculateHash())){
+                return  false;
+            }
+
+            if (!previousBlock.hash.equals(currentBlock.previousHash)){
+                return false;
+            }
+        }
+
+        return false;
     }
 }
