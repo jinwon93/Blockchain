@@ -1,5 +1,11 @@
 package com.example.blockchain.src.model;
 
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class BlockchainTransaction {
 
     private String id;
@@ -13,4 +19,6 @@ public class BlockchainTransaction {
         this.toId = toId;
         this.value = value;
     }
+
+
 }
