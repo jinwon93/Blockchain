@@ -10,6 +10,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthAccounts;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 
 import java.io.IOException;
@@ -37,6 +38,22 @@ public class BlockchainService {
                 BigInteger.valueOf(21_000) , accounts.getAccounts().get(trx.getToId() , BigInteger.valueOf(trx.getValue());
 
         EthSendTransaction response  = web3j.ethSendTransaction(transaction).send();
+
+
+        if (response.getError() != null){
+            trx.setAccepted(false);
+            LOGGER.info("Tx rejected: {}" , response.getError().getMessage());
+            return trx;
+        }
+
+        trx.setAccepted(true);
+        String txHash = response.getTransactionHash();
+        LOGGER.info("Tx Hash : {}" , txHash);
+
+        trx.setId(txHash);
+        EthGetTransactionReceipt receipt = web3j.ethGetTransactionReceipt(txHash).send();
+
+        receipt.getTransactionReceipt().ifPresent(transactionReceipt -> LOGGER.info("Tx receipt: {}" , transactionReceipt.getCumulativeGasUsed().intValue()));
 
         return trx;
     }
